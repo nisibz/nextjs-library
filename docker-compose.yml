@@ -1,0 +1,17 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: library-admin
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - .:/app
+      - /app/.next
+    env_file: ./.env
+
+networks:
+  default:
+    name: library-network
+    external: true
