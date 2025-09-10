@@ -45,7 +45,7 @@ export function DeleteBookDialog({
             </div>
           </div>
         </DialogHeader>
-        
+
         <div className="py-4">
           <p className="text-sm text-muted-foreground">
             Are you sure you want to delete this book?
@@ -53,7 +53,9 @@ export function DeleteBookDialog({
           <div className="mt-3 rounded-lg bg-muted p-3">
             <p className="font-medium">{book.title}</p>
             <p className="text-sm text-muted-foreground">by {book.author}</p>
-            <p className="text-xs text-muted-foreground mt-1">ISBN: {book.isbn}</p>
+            <p className="text-xs text-muted-foreground mt-1">
+              ISBN: {book.isbn}
+            </p>
           </div>
         </div>
 

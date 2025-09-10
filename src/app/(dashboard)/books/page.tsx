@@ -71,7 +71,7 @@ export default function BooksPage() {
 
   const handleConfirmDelete = async () => {
     if (!deletingBook) return;
-    
+
     try {
       await deleteBook(deletingBook.id).unwrap();
       setDeleteDialogOpen(false);

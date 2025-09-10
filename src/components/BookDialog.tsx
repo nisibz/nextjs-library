@@ -23,10 +23,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertTriangle } from "lucide-react";
 import { bookFormSchema, type BookFormData } from "@/lib/validations/book";
 import { Book } from "@/types/book";
-import {
-  useCreateBookMutation,
-  useUpdateBookMutation,
-} from "@/service/book";
+import { useCreateBookMutation, useUpdateBookMutation } from "@/service/book";
 
 interface BookDialogProps {
   open: boolean;
@@ -35,7 +32,12 @@ interface BookDialogProps {
   mode: "create" | "edit";
 }
 
-export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) {
+export function BookDialog({
+  open,
+  onOpenChange,
+  book,
+  mode,
+}: BookDialogProps) {
   const [createBook, { isLoading: isCreating }] = useCreateBookMutation();
   const [updateBook, { isLoading: isUpdating }] = useUpdateBookMutation();
   const [serverError, setServerError] = useState<string | null>(null);
@@ -46,27 +48,27 @@ export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) 
       title: "",
       author: "",
       isbn: "",
-      publicationYear: new Date().getFullYear(),
+      publicationYear: new Date().getFullYear().toString(),
     },
   });
 
   useEffect(() => {
     // Clear server error when dialog opens/closes or mode changes
     setServerError(null);
-    
+
     if (mode === "edit" && book) {
       form.reset({
         title: book.title,
         author: book.author,
         isbn: book.isbn,
-        publicationYear: book.publicationYear,
+        publicationYear: book.publicationYear.toString(),
       });
     } else if (mode === "create") {
       form.reset({
         title: "",
         author: "",
         isbn: "",
-        publicationYear: new Date().getFullYear(),
+        publicationYear: new Date().getFullYear().toString(),
       });
     }
   }, [book, mode, form, open]);
@@ -75,7 +77,7 @@ export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) 
     try {
       // Clear any previous server error
       setServerError(null);
-      
+
       const coverImageFile = data.coverImage?.[0] || undefined;
 
       if (mode === "create") {
@@ -83,7 +85,7 @@ export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) 
           title: data.title,
           author: data.author,
           isbn: data.isbn,
-          publicationYear: data.publicationYear,
+          publicationYear: Number(data.publicationYear),
           coverImage: coverImageFile,
         }).unwrap();
       } else if (mode === "edit" && book) {
@@ -93,7 +95,7 @@ export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) 
             title: data.title,
             author: data.author,
             isbn: data.isbn,
-            publicationYear: data.publicationYear,
+            publicationYear: Number(data.publicationYear),
             coverImage: coverImageFile,
           },
         }).unwrap();
@@ -101,13 +103,26 @@ export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) 
 
       form.reset();
       onOpenChange(false);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Error saving book:", error);
-      
+
       // Handle server-side validation errors
-      if (error?.data?.message) {
+      if (
+        error &&
+        typeof error === "object" &&
+        "data" in error &&
+        error.data &&
+        typeof error.data === "object" &&
+        "message" in error.data &&
+        typeof error.data.message === "string"
+      ) {
         setServerError(error.data.message);
-      } else if (error?.message) {
+      } else if (
+        error &&
+        typeof error === "object" &&
+        "message" in error &&
+        typeof error.message === "string"
+      ) {
         setServerError(error.message);
       } else {
         setServerError("An unexpected error occurred. Please try again.");
@@ -196,7 +211,7 @@ export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) 
             <FormField
               control={form.control}
               name="coverImage"
-              render={({ field: { onChange, value, ...field } }) => (
+              render={({ field: { onChange, ...field } }) => (
                 <FormItem>
                   <FormLabel>Cover Image</FormLabel>
                   <FormControl>
@@ -227,8 +242,8 @@ export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) 
                     ? "Creating..."
                     : "Updating..."
                   : mode === "create"
-                  ? "Create Book"
-                  : "Update Book"}
+                    ? "Create Book"
+                    : "Update Book"}
               </Button>
             </div>
           </form>

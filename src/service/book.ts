@@ -1,5 +1,10 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import type { Book, BooksResponse, CreateBookData, UpdateBookData } from "../types/book";
+import type {
+  Book,
+  BooksResponse,
+  CreateBookData,
+  UpdateBookData,
+} from "../types/book";
 
 export const booksApi = createApi({
   reducerPath: "booksApi",
@@ -9,14 +14,17 @@ export const booksApi = createApi({
   refetchOnFocus: true,
   tagTypes: ["Book"],
   endpoints: (builder) => ({
-    getBooks: builder.query<BooksResponse, { page?: number; limit?: number; search?: string }>({
+    getBooks: builder.query<
+      BooksResponse,
+      { page?: number; limit?: number; search?: string }
+    >({
       query: ({ page = 1, limit = 10, search } = {}) => {
         const params = new URLSearchParams({
           page: page.toString(),
           limit: limit.toString(),
         });
         if (search) {
-          params.append('search', search);
+          params.append("search", search);
         }
         return `books?${params.toString()}`;
       },
@@ -50,7 +58,8 @@ export const booksApi = createApi({
         if (data.title) formData.append("title", data.title);
         if (data.author) formData.append("author", data.author);
         if (data.isbn) formData.append("isbn", data.isbn);
-        if (data.publicationYear) formData.append("publicationYear", data.publicationYear.toString());
+        if (data.publicationYear)
+          formData.append("publicationYear", data.publicationYear.toString());
         if (data.coverImage) formData.append("coverImage", data.coverImage);
         return {
           url: `books/${id}`,
@@ -58,7 +67,10 @@ export const booksApi = createApi({
           body: formData,
         };
       },
-      invalidatesTags: (result, error, { id }) => [{ type: "Book", id }, "Book"],
+      invalidatesTags: (result, error, { id }) => [
+        { type: "Book", id },
+        "Book",
+      ],
     }),
     deleteBook: builder.mutation<Book, number>({
       query: (id) => ({

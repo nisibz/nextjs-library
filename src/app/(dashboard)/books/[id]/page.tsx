@@ -9,7 +9,15 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BookDialog } from "@/components/BookDialog";
 import { DeleteBookDialog } from "@/components/DeleteBookDialog";
-import { ArrowLeft, Edit, Trash2, Calendar, User, Hash, BookOpen } from "lucide-react";
+import {
+  ArrowLeft,
+  Edit,
+  Trash2,
+  Calendar,
+  User,
+  Hash,
+  BookOpen,
+} from "lucide-react";
 import Image from "next/image";
 
 export default function BookDetailPage() {
@@ -33,7 +41,7 @@ export default function BookDetailPage() {
 
   const handleConfirmDelete = async () => {
     if (!book) return;
-    
+
     try {
       await deleteBook(book.id).unwrap();
       setDeleteDialogOpen(false);
@@ -84,7 +92,8 @@ export default function BookDetailPage() {
         <div className="text-center py-16">
           <h2 className="text-2xl font-bold mb-4">Book Not Found</h2>
           <p className="text-muted-foreground mb-6">
-            The book you're looking for doesn't exist or has been removed.
+            The book you&apos;re looking for doesn&apos;t exist or has been
+            removed.
           </p>
           <Button onClick={() => router.push("/books")}>
             Go to Books Library
@@ -139,7 +148,9 @@ export default function BookDetailPage() {
                 ) : (
                   <div className="text-center">
                     <BookOpen className="h-16 w-16 text-muted-foreground/50 mx-auto mb-2" />
-                    <p className="text-sm text-muted-foreground">No cover image</p>
+                    <p className="text-sm text-muted-foreground">
+                      No cover image
+                    </p>
                   </div>
                 )}
               </div>
@@ -152,7 +163,9 @@ export default function BookDetailPage() {
           {/* Title and Author */}
           <div>
             <h1 className="text-4xl font-bold mb-2">{book.title}</h1>
-            <p className="text-xl text-muted-foreground mb-4">by {book.author}</p>
+            <p className="text-xl text-muted-foreground mb-4">
+              by {book.author}
+            </p>
             <Badge variant="secondary" className="text-sm">
               Published {book.publicationYear}
             </Badge>
@@ -204,11 +217,13 @@ export default function BookDetailPage() {
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <p>{new Date(book.createdAt).toLocaleDateString('en-US', {
-                  year: 'numeric',
-                  month: 'long',
-                  day: 'numeric'
-                })}</p>
+                <p>
+                  {new Date(book.createdAt).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
+                </p>
               </CardContent>
             </Card>
           </div>
@@ -226,7 +241,9 @@ export default function BookDetailPage() {
                 </div>
                 <div>
                   <span className="text-muted-foreground">Last Updated:</span>
-                  <span className="ml-2">{new Date(book.updatedAt).toLocaleDateString()}</span>
+                  <span className="ml-2">
+                    {new Date(book.updatedAt).toLocaleDateString()}
+                  </span>
                 </div>
               </div>
             </CardContent>

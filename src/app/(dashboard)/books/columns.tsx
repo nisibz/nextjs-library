@@ -12,7 +12,10 @@ interface ColumnsProps {
   onDelete: (book: Book) => void;
 }
 
-export const createColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Book>[] => [
+export const createColumns = ({
+  onEdit,
+  onDelete,
+}: ColumnsProps): ColumnDef<Book>[] => [
   {
     accessorKey: "id",
     header: ({ column }) => {
@@ -129,27 +132,15 @@ export const createColumns = ({ onEdit, onDelete }: ColumnsProps): ColumnDef<Boo
       const book = row.original;
       return (
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            asChild
-          >
+          <Button variant="ghost" size="sm" asChild>
             <Link href={`/books/${book.id}`}>
               <Eye className="h-4 w-4" />
             </Link>
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onEdit(book)}
-          >
+          <Button variant="ghost" size="sm" onClick={() => onEdit(book)}>
             <Edit className="h-4 w-4" />
           </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onDelete(book)}
-          >
+          <Button variant="ghost" size="sm" onClick={() => onDelete(book)}>
             <Trash2 className="h-4 w-4" />
           </Button>
         </div>
