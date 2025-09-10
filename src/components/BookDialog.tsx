@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertTriangle } from "lucide-react";
 import { bookFormSchema, type BookFormData } from "@/lib/validations/book";
 import { Book } from "@/types/book";
 import {
@@ -36,6 +38,7 @@ interface BookDialogProps {
 export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) {
   const [createBook, { isLoading: isCreating }] = useCreateBookMutation();
   const [updateBook, { isLoading: isUpdating }] = useUpdateBookMutation();
+  const [serverError, setServerError] = useState<string | null>(null);
 
   const form = useForm<BookFormData>({
     resolver: zodResolver(bookFormSchema),
@@ -48,6 +51,9 @@ export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) 
   });
 
   useEffect(() => {
+    // Clear server error when dialog opens/closes or mode changes
+    setServerError(null);
+    
     if (mode === "edit" && book) {
       form.reset({
         title: book.title,
@@ -63,10 +69,13 @@ export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) 
         publicationYear: new Date().getFullYear(),
       });
     }
-  }, [book, mode, form]);
+  }, [book, mode, form, open]);
 
   const onSubmit = async (data: BookFormData) => {
     try {
+      // Clear any previous server error
+      setServerError(null);
+      
       const coverImageFile = data.coverImage?.[0] || undefined;
 
       if (mode === "create") {
@@ -92,8 +101,17 @@ export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) 
 
       form.reset();
       onOpenChange(false);
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error saving book:", error);
+      
+      // Handle server-side validation errors
+      if (error?.data?.message) {
+        setServerError(error.data.message);
+      } else if (error?.message) {
+        setServerError(error.message);
+      } else {
+        setServerError("An unexpected error occurred. Please try again.");
+      }
     }
   };
 
@@ -109,6 +127,12 @@ export function BookDialog({ open, onOpenChange, book, mode }: BookDialogProps) 
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            {serverError && (
+              <Alert variant="destructive">
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription>{serverError}</AlertDescription>
+              </Alert>
+            )}
             <FormField
               control={form.control}
               name="title"
