@@ -1,19 +1,10 @@
-import {
-  Home,
-  Inbox,
-  Calendar,
-  Search,
-  Settings,
-  User2,
-  ChevronUp,
-} from "lucide-react";
+import { BookOpen, User2, ChevronUp } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -31,29 +22,9 @@ import Image from "next/image";
 
 const items = [
   {
-    title: "Home",
-    url: "#",
-    icon: Home,
-  },
-  {
-    title: "Inbox",
-    url: "#",
-    icon: Inbox,
-  },
-  {
-    title: "Calendar",
-    url: "#",
-    icon: Calendar,
-  },
-  {
-    title: "Search",
-    url: "#",
-    icon: Search,
-  },
-  {
-    title: "Settings",
-    url: "#",
-    icon: Settings,
+    title: "Books",
+    url: "/books",
+    icon: BookOpen,
   },
 ];
 
@@ -66,7 +37,7 @@ export default function AppSidebar() {
             <SidebarMenuButton asChild>
               <Link href="">
                 <Image src="/favicon.ico" alt="logo" width={20} height={20} />
-                <span>Lookni</span>
+                <span>Library</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -75,7 +46,6 @@ export default function AppSidebar() {
       <SidebarSeparator />
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (

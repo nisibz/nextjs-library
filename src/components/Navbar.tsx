@@ -1,6 +1,5 @@
 "use client";
 import { Moon, Sun } from "lucide-react";
-import Link from "next/link";
 import { Button } from "./ui/button";
 import { useTheme } from "next-themes";
 import {
@@ -17,7 +16,6 @@ export default function Navbar() {
     <nav className="p-4 flex items-center justify-between">
       <SidebarTrigger />
       <div className="flex items-center gap-4">
-        <Link href="/">Dashboard</Link>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="icon">
