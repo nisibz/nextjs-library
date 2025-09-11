@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "nestjs-library-tests.nisibz.com/",
+        hostname: "nestjs-library-tests.nisibz.com",
         pathname: "/uploads/**",
       },
     ],
