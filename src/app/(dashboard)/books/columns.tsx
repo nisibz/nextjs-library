@@ -3,19 +3,19 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { ArrowUpDown, Edit, Trash2, Eye } from "lucide-react";
-import { Book } from "@/types/book";
+import { BookListItem } from "@/types/book";
 import Image from "next/image";
 import Link from "next/link";
 
 interface ColumnsProps {
-  onEdit: (book: Book) => void;
-  onDelete: (book: Book) => void;
+  onEdit: (book: BookListItem) => void;
+  onDelete: (book: BookListItem) => void;
 }
 
 export const createColumns = ({
   onEdit,
   onDelete,
-}: ColumnsProps): ColumnDef<Book>[] => [
+}: ColumnsProps): ColumnDef<BookListItem>[] => [
   {
     accessorKey: "id",
     header: ({ column }) => {
@@ -84,6 +84,33 @@ export const createColumns = ({
       );
     },
     cell: ({ row }) => <div>{row.getValue("publicationYear")}</div>,
+  },
+  {
+    accessorKey: "quantity",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Available
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const quantity = row.getValue("quantity") as number;
+      return (
+        <div className="flex items-center gap-2">
+          <span>{quantity}</span>
+          <span
+            className={`h-2 w-2 rounded-full ${
+              quantity > 0 ? "bg-green-500" : "bg-red-500"
+            }`}
+          />
+        </div>
+      );
+    },
   },
   {
     accessorKey: "coverImage",

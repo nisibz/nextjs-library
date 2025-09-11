@@ -1,18 +1,18 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
+import { createApi } from "@reduxjs/toolkit/query/react";
 import type {
   Book,
   BooksResponse,
   CreateBookData,
   UpdateBookData,
 } from "../types/book";
+import type { BookTransaction } from "../types/transaction";
+import { baseQueryWithAuth } from "../lib/baseQuery";
 
 export const booksApi = createApi({
   reducerPath: "booksApi",
-  baseQuery: fetchBaseQuery({
-    baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL || "http://localhost:3100/",
-  }),
+  baseQuery: baseQueryWithAuth,
   refetchOnFocus: true,
-  tagTypes: ["Book"],
+  tagTypes: ["Book", "Transaction"],
   endpoints: (builder) => ({
     getBooks: builder.query<
       BooksResponse,
@@ -32,7 +32,7 @@ export const booksApi = createApi({
     }),
     getBook: builder.query<Book, number>({
       query: (id) => `books/${id}`,
-      providesTags: (result, error, id) => [{ type: "Book", id }],
+      providesTags: (_result, _error, id) => [{ type: "Book", id }],
     }),
     createBook: builder.mutation<Book, CreateBookData>({
       query: (newBook) => {
@@ -67,7 +67,7 @@ export const booksApi = createApi({
           body: formData,
         };
       },
-      invalidatesTags: (result, error, { id }) => [
+      invalidatesTags: (_result, _error, { id }) => [
         { type: "Book", id },
         "Book",
       ],
@@ -79,6 +79,34 @@ export const booksApi = createApi({
       }),
       invalidatesTags: ["Book"],
     }),
+    borrowBook: builder.mutation<BookTransaction, number>({
+      query: (bookId) => ({
+        url: `books/${bookId}/borrow`,
+        method: "POST",
+      }),
+      invalidatesTags: (_result, _error, bookId) => [
+        { type: "Book", id: bookId },
+        "Book",
+        "Transaction",
+      ],
+    }),
+    returnBook: builder.mutation<BookTransaction, number>({
+      query: (bookId) => ({
+        url: `books/${bookId}/return`,
+        method: "POST",
+      }),
+      invalidatesTags: (_result, _error, bookId) => [
+        { type: "Book", id: bookId },
+        "Book",
+        "Transaction",
+      ],
+    }),
+    getBookTransactions: builder.query<BookTransaction[], number>({
+      query: (bookId) => `books/${bookId}/transactions`,
+      providesTags: (_result, _error, bookId) => [
+        { type: "Transaction", id: bookId },
+      ],
+    }),
   }),
 });
 
@@ -88,4 +116,7 @@ export const {
   useCreateBookMutation,
   useUpdateBookMutation,
   useDeleteBookMutation,
+  useBorrowBookMutation,
+  useReturnBookMutation,
+  useGetBookTransactionsQuery,
 } = booksApi;

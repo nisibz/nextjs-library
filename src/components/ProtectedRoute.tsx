@@ -6,7 +6,11 @@ import { useSelector, useDispatch } from "react-redux";
 import { loadFromStorage } from "@/store/authSlice";
 import type { RootState } from "@/store";
 
-export default function Home() {
+interface ProtectedRouteProps {
+  children: React.ReactNode;
+}
+
+export function ProtectedRoute({ children }: ProtectedRouteProps) {
   const router = useRouter();
   const dispatch = useDispatch();
   const { isAuthenticated, token } = useSelector(
@@ -18,12 +22,14 @@ export default function Home() {
   }, [dispatch]);
 
   useEffect(() => {
-    if (isAuthenticated || token) {
-      router.push("/books");
-    } else {
+    if (!isAuthenticated && !token) {
       router.push("/login");
     }
   }, [isAuthenticated, token, router]);
 
-  return null;
+  if (!isAuthenticated && !token) {
+    return null;
+  }
+
+  return <>{children}</>;
 }

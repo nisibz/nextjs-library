@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BookDialog } from "@/components/BookDialog";
 import { DeleteBookDialog } from "@/components/DeleteBookDialog";
-import { Book } from "@/types/book";
+import { Book, BookListItem } from "@/types/book";
 import { Plus } from "lucide-react";
 
 export default function BooksPage() {
@@ -58,14 +58,14 @@ export default function BooksPage() {
     setDialogOpen(true);
   };
 
-  const handleEditBook = (book: Book) => {
+  const handleEditBook = (book: BookListItem) => {
     setDialogMode("edit");
-    setEditingBook(book);
+    setEditingBook(book as Book); // Cast to Book since BookListItem is compatible
     setDialogOpen(true);
   };
 
-  const handleDeleteBook = (book: Book) => {
-    setDeletingBook(book);
+  const handleDeleteBook = (book: BookListItem) => {
+    setDeletingBook(book as Book); // Cast to Book since BookListItem is compatible
     setDeleteDialogOpen(true);
   };
 

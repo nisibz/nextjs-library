@@ -1,4 +1,10 @@
-import { BookOpen, User2, ChevronUp } from "lucide-react";
+"use client";
+
+import { BookOpen, User2, ChevronUp, BookMarked, LogOut } from "lucide-react";
+import { useSelector, useDispatch } from "react-redux";
+import { useRouter } from "next/navigation";
+import { logout } from "@/store/authSlice";
+import type { RootState } from "@/store";
 import {
   Sidebar,
   SidebarContent,
@@ -26,9 +32,23 @@ const items = [
     url: "/books",
     icon: BookOpen,
   },
+  {
+    title: "My Books",
+    url: "/my-books",
+    icon: BookMarked,
+  },
 ];
 
 export default function AppSidebar() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { user } = useSelector((state: RootState) => state.auth);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    router.push("/login");
+  };
+
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
@@ -68,18 +88,13 @@ export default function AppSidebar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuButton>
-                  <User2 /> Username
+                  <User2 /> {user?.username || "User"}
                   <ChevronUp className="ml-auto" />
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
-                <DropdownMenuItem>
-                  <span>Account</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <span>Billing</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
+                  <LogOut className="mr-2 h-4 w-4" />
                   <span>Sign out</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>

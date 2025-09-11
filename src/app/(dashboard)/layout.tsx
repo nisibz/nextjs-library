@@ -1,25 +1,26 @@
+"use client";
+
 import AppSidebar from "@/components/AppSidebar";
 import Navbar from "@/components/Navbar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { cookies } from "next/headers";
+import { ProtectedRoute } from "@/components/ProtectedRoute";
 
-export default async function DashboardLayout({
+export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const cookieStore = await cookies();
-  const defaultOpen = cookieStore.get("sidebar_state")?.value === "true";
-
   return (
-    <div className="flex">
-      <SidebarProvider defaultOpen={defaultOpen}>
-        <AppSidebar />
-        <main className="w-full">
-          <Navbar />
-          <div className="px-4">{children}</div>
-        </main>
-      </SidebarProvider>
-    </div>
+    <ProtectedRoute>
+      <div className="flex">
+        <SidebarProvider defaultOpen={true}>
+          <AppSidebar />
+          <main className="w-full">
+            <Navbar />
+            <div className="px-4">{children}</div>
+          </main>
+        </SidebarProvider>
+      </div>
+    </ProtectedRoute>
   );
 }
