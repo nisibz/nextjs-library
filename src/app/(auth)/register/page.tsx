@@ -16,11 +16,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Alert } from "@/components/ui/alert";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useRegisterMutation } from "@/service/auth";
 import { setCredentials } from "@/store/authSlice";
 import { authSchema, type AuthFormData } from "@/lib/validations/auth";
 import type { RootState } from "@/store";
+import { AlertTriangle } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -102,12 +103,15 @@ export default function RegisterPage() {
 
             {error && (
               <Alert variant="destructive">
-                {"data" in error &&
-                error.data &&
-                typeof error.data === "object" &&
-                "message" in error.data
-                  ? String(error.data.message)
-                  : "Registration failed. Please try again."}
+                <AlertTriangle className="h-4 w-4" />
+                <AlertDescription>
+                  {"data" in error &&
+                  error.data &&
+                  typeof error.data === "object" &&
+                  "message" in error.data
+                    ? String(error.data.message)
+                    : "Registration failed. Please try again."}
+                </AlertDescription>
               </Alert>
             )}
 
