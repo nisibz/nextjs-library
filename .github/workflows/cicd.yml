@@ -55,6 +55,8 @@ jobs:
           tags: ${{env.IMAGE_URI}}
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            NEXT_PUBLIC_API_BASE_URL=${{ secrets.NEXT_PUBLIC_API_BASE_URL }}
 
       - name: Deploy to Cloud Run
         id: deploy
