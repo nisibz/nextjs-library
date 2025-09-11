@@ -1,36 +1,126 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NextJS Library - Books Management System
+
+A modern books management application with CRUD operations, file uploads, and responsive design.
+
+## Features
+
+- Complete books management with CRUD operations
+- Book cover image upload and display
+- Search and pagination functionality
+- Authentication system with protected routes
+- Responsive design with light/dark theme support
+- Type-safe implementation with TypeScript and Zod validation
+- Real-time state management with Redux Toolkit Query
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 20.x or later
+- pnpm (recommended package manager)
+- Docker (optional)
+
+### Installation
+
+Clone this repository:
+
+```
+git clone https://github.com/nisibz/nextjs-library-tests.git
+cd nextjs-library-tests
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Development Mode
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Local Setup
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+1. Install dependencies:
 
-## Learn More
+```
+   pnpm install
+```
 
-To learn more about Next.js, take a look at the following resources:
+2. Copy environment variables:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+   cp .env.example .env
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. Start the development server:
 
-## Deploy on Vercel
+```
+   pnpm dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Docker Development Setup
+
+1. Create the required Docker network:
+
+```
+  docker network create library-network
+```
+
+2. Start the development containers:
+
+```
+  docker compose up -d
+```
+
+3. Access the application at [http://localhost:3000](http://localhost:3000)
+
+To stop the containers:
+
+```
+  docker compose down
+```
+
+## Production Mode
+
+### Local Production Setup
+
+1. Create an optimized production build:
+
+```
+   pnpm build
+```
+
+2. Start the production server:
+
+```
+   pnpm start
+```
+
+3. Access the application at [http://localhost:3000](http://localhost:3000)
+
+### Docker Production Setup
+
+1. Build the production Docker image:
+
+```
+   docker build -t nextjs-library:prod -f Dockerfile.prod .
+```
+
+2. Run the production container:
+
+```
+   docker run -p 3000:3000 --name nextjs-library-prod nextjs-library:prod
+```
+
+3. Access the application at [http://localhost:3000](http://localhost:3000)
+
+## Additional Commands
+
+- `pnpm lint` - Run ESLint for code linting
+- `pnpm format` - Format code with Prettier
+
+## Technology Stack
+
+- Next.js 15 - React framework with App Router and Turbopack
+- React 19 - Frontend library
+- TypeScript - Type-safe JavaScript
+- Redux Toolkit Query - API state management
+- Tailwind CSS v4 - Utility-first CSS framework
+- shadcn/ui - Modern UI component library
+- React Hook Form - Form handling with Zod validation
+- Docker - Containerization
