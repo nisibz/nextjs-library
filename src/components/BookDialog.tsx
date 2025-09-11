@@ -211,7 +211,7 @@ export function BookDialog({
             <FormField
               control={form.control}
               name="coverImage"
-              render={({ field: { onChange, ...field } }) => (
+              render={({ field: { onChange, value, ...field } }) => (
                 <FormItem>
                   <FormLabel>Cover Image</FormLabel>
                   <FormControl>
