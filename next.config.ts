@@ -9,6 +9,11 @@ const nextConfig: NextConfig = {
         port: "3100",
         pathname: "/uploads/**",
       },
+      {
+        protocol: "https",
+        hostname: "nestjs-library-tests.nisibz.com/",
+        pathname: "/uploads/**",
+      },
     ],
   },
   output: "standalone",
